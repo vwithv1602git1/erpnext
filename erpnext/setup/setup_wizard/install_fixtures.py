@@ -206,18 +206,15 @@ def install(country=None):
 			'is_group': 1, 'parent_assessment_group': ''},
 
 	]
-
 	from erpnext.setup.setup_wizard.industry_type import get_industry_types
 	records += [{"doctype":"Industry Type", "industry": d} for d in get_industry_types()]
 	# records += [{"doctype":"Operation", "operation": d} for d in get_operations()]
 
 	records += [{'doctype': 'Lead Source', 'source_name': _(d)} for d in default_lead_sources]
-
 	from frappe.modules import scrub
 	for r in records:
 		doc = frappe.new_doc(r.get("doctype"))
 		doc.update(r)
-
 		# ignore mandatory for root
 		parent_link_field = ("parent_" + scrub(doc.doctype))
 		if doc.meta.get_field(parent_link_field) and not doc.get(parent_link_field):
